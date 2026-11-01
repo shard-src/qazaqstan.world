@@ -16,24 +16,24 @@
     <style>
         .profile-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
             gap: 0.75rem;
             margin-top: 0.75rem;
         }
 
         @media (min-width: 768px) {
             .profile-grid {
-                grid-template-columns: 3fr 2fr;
+                grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
             }
 
             .symbol-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             }
         }
 
         .symbol-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
             gap: 0.75rem;
         }
 
@@ -431,11 +431,30 @@ Bızdıñ el osyndai!
             }
         });
 
-        // Anthem playback drives the retro progress bar
+        // Anthem playback drives the retro progress bar (width adapts to card)
         (function () {
             var audio = document.getElementById('anthem-audio');
             var bar = document.getElementById('anthem-progress');
             if (!audio || !bar) return;
+
+            var PCT_CHARS = 16; // brackets + space + "MM:SS / MM:SS"
+
+            // measure the real per-glyph advance (0.6em quantizes to whole px)
+            function charW() {
+                var s = document.createElement('span');
+                s.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;' +
+                    'font:400 13px "Source Code Pro", monospace';
+                s.textContent = '██████████░░░░░░0123456789:/ ';
+                document.body.appendChild(s);
+                var w = s.getBoundingClientRect().width / s.textContent.length;
+                s.remove();
+                return w || 7.8;
+            }
+
+            function fitWidth() {
+                var avail = bar.closest('.card-body').clientWidth;
+                return Math.max(8, Math.min(34, Math.floor(avail / charW()) - PCT_CHARS));
+            }
 
             function fmt(t) {
                 if (!isFinite(t)) return '--:--';
@@ -445,14 +464,26 @@ Bızdıñ el osyndai!
 
             function update() {
                 var pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+                bar.dataset.width = fitWidth();
                 bar.dataset.value = pct.toFixed(1);
                 bar.dataset.pct = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
                 SMUI.retro(bar);
             }
 
+            var resizeTimer;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(update, 150);
+            });
+
             audio.addEventListener('timeupdate', update);
             audio.addEventListener('loadedmetadata', update);
             audio.addEventListener('ended', update);
+            update();
+            // metrics change when the webfont swaps in — re-fit after fonts load
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(function () { update(); });
+            }
         })();
     </script>
     <script defer src="//metrics.inzgiba.space/metro" data-website-id="feaf3a4f-7d8c-46f7-a3ec-80ee00a8a359"></script>

@@ -219,7 +219,8 @@ kbd {
     padding: 0.75rem 1.25rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
 }
 
 .nav-logo {
@@ -239,12 +240,11 @@ kbd {
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    flex-wrap: wrap;
+    row-gap: 2px;
     margin: 0;
     padding: 0;
     list-style: none;
-    overflow-x: auto;
-    scrollbar-width: none;
 }
 
 .nav-menu a {
@@ -504,6 +504,7 @@ kbd {
     font-size: var(--text-ui);
     line-height: 1.31;
     white-space: pre;
+    overflow-x: auto;
     user-select: none;
 }
 
