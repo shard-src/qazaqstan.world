@@ -1,230 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qazaqstan</title>
+    <meta name="description" content="Republic of Kazakhstan — statistics, flag, emblem, anthem and lyrics. Terminal edition.">
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./favicon/32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./favicon/16x16.png">
     <link rel="manifest" href="./site.webmanifest">
-    <!-- Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth@50;100&display=swap" rel="stylesheet">
-    <!-- Style -->
-    <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.7.2/dist/terminal.min.css" />
+    <!-- Style: smui // spacemolt ui -->
+    <link rel="stylesheet" href="./assets/smui.css">
     <style>
-        :root {
-            --global-font-size: 15px;
-            --global-line-height: 1.4em;
-            --global-space: 10px;
-            --font-stack: 'Inconsolata', monospace;
-            --mono-font-stack: 'Inconsolata', monospace;
-            --background-color: #222225;
-            --page-width: 60em;
-            --font-color: #e8e9ed;
-            --invert-font-color: #222225;
-            --secondary-color: #a3abba;
-            --tertiary-color: #a3abba;
-            --primary-color: #62c4ff;
-            --error-color: #ff3c74;
-            --progress-bar-background: #3f3f44;
-            --progress-bar-fill: #62c4ff;
-            --code-bg-color: #3f3f44;
-            --input-style: solid;
-            --display-h1-decoration: none;
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
         }
-        img {
-            height: 300px;
-            object-fit: contain;
+
+        @media (min-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 3fr 2fr;
+            }
+
+            .symbol-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
-        audio {
-            width: 100%;
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
         }
-        table th {
-            width: 25%;
-        }
-        table td {
-            width: 45%;
-        }
-        .lyrics pre {
-            border: none;
-            color: var(--font-color);
-        }
-        .lyrics td, .lyrics th {
-            width: auto;
-            border-color: var(--secondary-color);
-        }
-        .lyrics th {
-            font-weight: normal;
-        }
-        .clearfix {
-            zoom: 1;
-        }
-        .clearfix:before,
-        .clearfix:after {
-            content: "";
-            display: table;
-        }
-        .clearfix:after {
-            clear: both;
+
+        .flag-box {
+            background: var(--surface-2);
         }
     </style>
 </head>
 
-<body class="terminal">
+<body id="top">
+    <!-- Boot sequence (plays once per session; click or ESC to skip) -->
+    <div class="boot" id="boot" hidden>
+        <div class="skip">click / esc — skip</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="menu">
+        <div class="nav-inner">
+            <div class="nav-logo">
+                <a href="#top">qazaqstan:~$</a><span class="cli-cursor">█</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#stats">Statistics</a></li>
+                <li><a href="#flag">Flag</a></li>
+                <li><a href="#emblem">Emblem</a></li>
+                <li><a href="#anthem">Anthem</a></li>
+                <li><a href="#lyrics">Lyrics</a></li>
+                <li><a href="#terminal">Terminal</a></li>
+            </ul>
+            <div class="nav-spacer"></div>
+            <button class="btn btn-sm theme-btn" type="button" aria-label="toggle color theme">
+                <span class="theme-btn-label-dark">light</span>
+                <span class="theme-btn-label-light">dark</span>
+            </button>
+        </div>
+    </nav>
+
     <div class="container">
-        <!-- Navigation -->
-        <section>
-            <div class="terminal-nav" id="menu">
-                <div class="terminal-logo">
-                    <div class="logo terminal-prompt">
-                        <a href="#" class="no-style">Qazaqstan</a>
+        <!-- Hero -->
+        <section class="hero-block">
+            <p class="eyebrow">Republic / Central Asia / since 1991</p>
+            <h1 class="hero">QAZAQSTAN</h1>
+            <p class="hero-sub">
+                Reference console for the Republic of Kazakhstan: state profile,
+                symbols and the national anthem. Terminal edition, powered by
+                <a href="https://smui.statico.io">smui</a> // spacemolt ui.
+            </p>
+        </section>
+
+        <!-- Statistics -->
+        <section class="section" id="stats">
+            <header>
+                <p class="eyebrow">System readouts</p>
+                <h2 class="heading">Statistics</h2>
+            </header>
+
+            <div class="stat-grid">
+                <div class="stat-card card-glow">
+                    <span class="stat-label">Population</span>
+                    <div class="stat-value">19,082,467</div>
+                    <div class="stat-delta" data-tone="muted">2021 census</div>
+                </div>
+                <div class="stat-card card-glow">
+                    <span class="stat-label">Area</span>
+                    <div class="stat-value">2,724,900</div>
+                    <div class="stat-delta">km² — <a href="https://www.openstreetmap.org/relation/214665">9th worldwide</a></div>
+                </div>
+                <div class="stat-card card-glow">
+                    <span class="stat-label">Density</span>
+                    <div class="stat-value">7/km²</div>
+                    <div class="stat-delta" data-tone="muted">236th</div>
+                </div>
+                <div class="stat-card card-glow">
+                    <span class="stat-label">Water</span>
+                    <div class="retro" data-value="1.7" data-width="16" data-tone="primary"></div>
+                    <div class="stat-delta" data-tone="yellow">1.7% of surface</div>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <!-- State profile -->
+                <div class="card card-glow">
+                    <div class="card-header">
+                        <span class="card-title">State profile</span>
+                        <span class="status"><span class="status-dot"></span>nominal</span>
+                    </div>
+                    <div class="card-body leaders">
+                        <div class="leader-row">
+                            <span class="leader-label">President</span>
+                            <span class="leader-dots"></span>
+                            <span class="leader-value">Kassym-Jomart Tokayev</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-label">Official language</span>
+                            <span class="leader-dots"></span>
+                            <span class="leader-value">Kazakh</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-label">Co-official</span>
+                            <span class="leader-dots"></span>
+                            <span class="leader-value">Russian</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-label">Capital</span>
+                            <span class="leader-dots"></span>
+                            <span class="leader-value"><a
+                                    href="https://www.openstreetmap.org/relation/3087156">Astana</a></span>
+                            <span class="leader-note">51°10′N 71°26′E</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-label">Largest city</span>
+                            <span class="leader-dots"></span>
+                            <span class="leader-value"><a
+                                    href="https://www.openstreetmap.org/relation/2465058">Almaty</a></span>
+                            <span class="leader-note">43°16′N 76°53′E</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-label">Time zone</span>
+                            <span class="leader-dots"></span>
+                            <span class="leader-value">UTC +5 / +6</span>
+                            <span class="leader-note">west / east</span>
+                        </div>
+                        <div class="leader-row">
+                            <span class="leader-label">Currency</span>
+                            <span class="leader-dots"></span>
+                            <span class="leader-value">Tenge ₸</span>
+                            <span class="leader-note">KZT</span>
+                        </div>
                     </div>
                 </div>
-                <nav class="terminal-menu">
-                    <ul>
-                        <li><a class="menu-item" href="#flag">Flag</a></li>
-                        <li><a class="menu-item" href="#emblem">Emblem</a></li>
-                        <li><a class="menu-item" href="#anthem">Anthem</a></li>
-                    </ul>
-                </nav>
+
+                <!-- Largest cities -->
+                <div class="card card-glow">
+                    <div class="card-header">
+                        <span class="card-title">Largest cities</span>
+                        <span class="badge" data-tone="muted">2021</span>
+                    </div>
+                    <div class="card-body ascii"
+                        data-width='16'
+                        data-chart='[
+                            {"label":"ALMATY","value":2030454,"display":"2.03M"},
+                            {"label":"ASTANA","value":1350228,"display":"1.35M"},
+                            {"label":"SHYMKENT","value":1055828,"display":"1.06M"},
+                            {"label":"KARAGANDA","value":538861,"display":"539K"},
+                            {"label":"AKTOBE","value":511979,"display":"512K"},
+                            {"label":"TARAZ","value":360933,"display":"361K"}
+                        ]'>
+                    </div>
+                </div>
             </div>
         </section>
-        <hr>
-        <section>
+
+        <!-- Flag + Emblem -->
+        <section class="section" id="flag">
             <header>
-                <h2 id="stats">Statistic</h2>
+                <p class="eyebrow">State symbols</p>
+                <h2 class="heading">Flag &amp; Emblem</h2>
             </header>
-            <!-- Gov -->
-            <table>
-                <tbody>
-                    <tr>
-                        <th>President</th>
-                        <td>Kassym-Jomart Tokayev</td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- Lang -->
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Official languages</th>
-                        <td>Kazakh</td>
-                    </tr>
-                    <tr>
-                        <th>Co-official</th>
-                        <td>Russian</td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- Area -->
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Area</th>
-                        <td>2,724,900 km2</td>
-                        <td><a href="https://www.openstreetmap.org/relation/214665">9th</a></td>
-                    </tr>
-                    <tr>
-                        <th>Water</th>
-                        <td colspan="2">1.7 %</td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- City -->
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Capital</th>
-                        <td>Nur-Sultan</td>
-                        <td><a href="https://www.openstreetmap.org/relation/3087156">51°10′N - 71°26′E</a></td>
-                    </tr>
-                    <tr>
-                        <th>Largest city</th>
-                        <td>Almaty</td>
-                        <td><a href="https://www.openstreetmap.org/relation/2465058">43°16′39″N - 76°53′45″E</a></td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- Other -->
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Population</th>
-                        <td>19,082,467</td>
-                        <td>2021 estimate</td>
-                    </tr>
-                    <tr>
-                        <th>Density</th>
-                        <td>7/km2</td>
-                        <td>236th</td>
-                    </tr>
-                    <tr>
-                        <th>Time zone</th>
-                        <td>UTC +5 / +6</td>
-                        <td>West / East</td>
-                    </tr>
-                    <tr>
-                        <th>Currency</th>
-                        <td>Tenge</td>
-                        <td>₸ / KZT</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="symbol-grid">
+                <div class="card card-glow" id="flag-card">
+                    <div class="card-header">
+                        <span class="card-title">Flag</span>
+                        <span class="badge">adopted 1992</span>
+                    </div>
+                    <div class="card-body figure-box flag-box">
+                        <figure>
+                            <img src="./assets/flag.svg" alt="Flag of Kazakhstan" title="Flag of Kazakhstan">
+                        </figure>
+                    </div>
+                </div>
+                <div class="card card-glow" id="emblem">
+                    <div class="card-header">
+                        <span class="card-title">Emblem</span>
+                        <span class="badge">adopted 1992</span>
+                    </div>
+                    <div class="card-body figure-box">
+                        <figure>
+                            <img src="./assets/emblem.svg" alt="Emblem of Kazakhstan" title="Emblem of Kazakhstan">
+                        </figure>
+                    </div>
+                </div>
+            </div>
         </section>
-        <hr>
-        <!-- Flag -->
-        <section>
-            <header><h2 id="flag">Flag</h2></header>
-            <figure>
-                <img src="./assets/flag.svg" alt="Flag of Kazakshtan" title="Flag of Kazakshtan">
-                <!-- <figcaption>Flag</figcaption> -->
-            </figure>
-        </section>
-        <hr>
-        <!-- Emblem -->
-        <section>
-            <header><h2 id="emblem">Emblem</h2></header>
-            <figure>
-                <img src="./assets/emblem.svg" alt="Emblem of Kazakshtan" title="Emblem of Kazakshtan">
-                <!-- <figcaption>Emblem</figcaption> -->
-            </figure>
-        </section>
-        <hr>
+
         <!-- Anthem -->
-        <section>
-            <header><h2 id="anthem">Anthem</h2></header>
-            <figure>
-                <audio controls>
-                    <source src="./assets/anthem.ogg" type="audio/ogg; codecs=vorbis">
-                    Тег audio не поддерживается вашим браузером. 
-                </audio>
-                <!-- <figcaption>Anthem</figcaption> -->
-            </figure>
-        </section>
-        <hr>
-        <section>
+        <section class="section" id="anthem">
             <header>
-                <h2 id="lyrics">Lyrics</h2>
+                <p class="eyebrow">Audio</p>
+                <h2 class="heading">Anthem</h2>
             </header>
-            <table class="lyrics">
-                <caption>
-                    <b>National Anthem of Kazakhstan - 2006</b>
-                </caption>
-                <thead>
-                    <tr>
-                        <th>Cyrillic</th>
-                        <th>Latin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th><pre>
+            <div class="card card-glow">
+                <div class="card-header">
+                    <span class="card-title">Meniñ elim — since 2006</span>
+                    <span class="status"><span class="status-dot" data-tone="primary"></span>standby</span>
+                </div>
+                <div class="card-body">
+                    <figure>
+                        <audio controls id="anthem-audio">
+                            <source src="./assets/anthem.ogg" type="audio/ogg; codecs=vorbis">
+                            Audio tag is not supported by your browser.
+                        </audio>
+                    </figure>
+                    <p class="retro" id="anthem-progress" data-value="0" data-width="34" data-tone="green"
+                        data-pct="--:-- / --:--" style="margin-top:10px"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lyrics -->
+        <section class="section" id="lyrics">
+            <header>
+                <p class="eyebrow">Anthem // 2006</p>
+                <h2 class="heading">Lyrics</h2>
+            </header>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">National Anthem of Kazakhstan</span>
+                    <span class="badge" data-tone="purple">Qazaq / Latin</span>
+                </div>
+                <div class="table-scroll">
+                    <table class="lyrics">
+                        <thead>
+                            <tr>
+                                <th>Cyrillic</th>
+                                <th>Latin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th><pre>
 <b>I</b>
 Алтын күн аспаны,
 Алтын дән даласы,
@@ -252,8 +291,8 @@
 Біздің ел осындай!
 
 (𝄆) <b>Қайырмасы</b> (𝄇)
-                        </pre></th>
-                        <th><pre>
+                                </pre></th>
+                                <th><pre>
 <b>I</b>
 Altyn kün aspany,
 Altyn dän dalasy,
@@ -281,23 +320,142 @@ Bızdıñ el baqytty,
 Bızdıñ el osyndai!
 
 (𝄆) <b>Qaiyrmasy</b> (𝄇)
-                        </pre></th>
-                    </tr>
-                </tbody>
-            </table>
+                                </pre></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
+
+        <!-- Terminal -->
+        <section class="section" id="terminal">
+            <header>
+                <p class="eyebrow">Easter egg</p>
+                <h2 class="heading">Terminal</h2>
+            </header>
+            <div id="terminal-cli"></div>
+        </section>
+
         <!-- Footer -->
-        <section>
-            <p>
-                <span style="float: left;">Version: 1.0.8</span>
-                <span style="float: right;">Created by <a href="https://inzgiba.me/">InzGIBA</a></span>
-                <span class="clearfix"></span>
-            </p>
-            <p>
-                <span><a href="#menu">Go to Top</a></span>
-            </p>
-        </section>
+        <footer class="footer">
+            <span>VERSION 2.0.0 // SMUI</span>
+            <span>CREATED BY <a href="https://inzgiba.me/">INZGIBA</a></span>
+            <span><a href="#menu">GO TO TOP ↑</a></span>
+        </footer>
     </div>
+
+    <script src="./assets/smui.js"></script>
+    <script>
+        SMUI.boot(document.getElementById('boot'), [
+            { text: 'SMUI BIOS v2.0.0 — qazaqstan.world', delay: 260 },
+            { text: 'MEMORY CHECK ............... 64K', ok: true },
+            { text: 'MOUNTING /dev/steppe ....... ext4', ok: true },
+            { text: 'LOADING flag.svg ........... 10K', ok: true },
+            { text: 'LOADING emblem.svg ......... 50K', ok: true },
+            { text: 'LOADING anthem.ogg ......... 1.6M', ok: true },
+            { text: 'CALIBRATING SOURCE CODE PRO ', ok: true },
+            { text: 'STARTING INTERFACE .......... ', ok: true, delay: 320 }
+        ]);
+
+        SMUI.cli(document.getElementById('terminal-cli'), {
+            prompt: 'qazaqstan',
+            welcome: [
+                { text: 'qazaqstan.world console v2.0.0', kind: 'info' },
+                { text: "type 'help' to list commands", kind: 'muted' }
+            ],
+            commands: {
+                stats: {
+                    desc: 'show country statistics',
+                    run: function () {
+                        return [
+                            'population ......... 19,082,467 (2021)',
+                            'area ............... 2,724,900 km2 (9th)',
+                            'density ............ 7/km2',
+                            'capital ............ Astana',
+                            'currency ........... tenge (KZT)'
+                        ];
+                    }
+                },
+                flag: {
+                    desc: 'describe the national flag',
+                    run: function () {
+                        return [
+                            'sky blue field with a golden sun (32 rays)',
+                            'a steppe eagle flying beneath it',
+                            'national ornamental pattern "koshkar-muiz" on the hoist side',
+                            'ratio 1:2, designed by Shaken Niyazbekov, 1992'
+                        ];
+                    }
+                },
+                anthem: {
+                    desc: 'scroll to anthem and play',
+                    run: function () {
+                        document.getElementById('anthem').scrollIntoView({ behavior: 'smooth' });
+                        var a = document.getElementById('anthem-audio');
+                        a.play().catch(function () { /* autoplay blocked */ });
+                        return [{ text: '> playing "Meniñ elim" — scroll for lyrics', kind: 'success' }];
+                    }
+                },
+                capital: {
+                    desc: 'show capital info',
+                    run: function () {
+                        return [
+                            'Astana (renamed from Nur-Sultan in 2022)',
+                            '51°10′N 71°26′E — on the Ishim river',
+                            'https://www.openstreetmap.org/relation/3087156'
+                        ];
+                    }
+                },
+                theme: {
+                    desc: 'theme [dark|light] — switch palette',
+                    run: function (args) {
+                        if (args[0] === 'light' || args[0] === 'dark') {
+                            SMUI.theme.apply(args[0]);
+                            return [{ text: 'theme set to ' + args[0], kind: 'success' }];
+                        }
+                        SMUI.theme.toggle();
+                        return [{ text: 'theme toggled', kind: 'success' }];
+                    }
+                },
+                version: {
+                    desc: 'print interface version',
+                    run: function () { return 'qazaqstan.world v2.0.0 // smui statico build'; }
+                },
+                sudo: {
+                    desc: 'become the president',
+                    run: function () {
+                        return [{ text: 'permission denied: this incident will be reported to Akorda', kind: 'error' }];
+                    }
+                }
+            }
+        });
+
+        // Anthem playback drives the retro progress bar
+        (function () {
+            var audio = document.getElementById('anthem-audio');
+            var bar = document.getElementById('anthem-progress');
+            if (!audio || !bar) return;
+
+            function fmt(t) {
+                if (!isFinite(t)) return '--:--';
+                var m = Math.floor(t / 60), s = Math.floor(t % 60);
+                return m + ':' + String(s).padStart(2, '0');
+            }
+
+            function update() {
+                var pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+                bar.dataset.value = pct.toFixed(1);
+                bar.dataset.pct = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+                SMUI.retro(bar);
+            }
+
+            audio.addEventListener('timeupdate', update);
+            audio.addEventListener('loadedmetadata', update);
+            audio.addEventListener('ended', update);
+        })();
+    </script>
     <script defer src="//metrics.inzgiba.space/metro" data-website-id="feaf3a4f-7d8c-46f7-a3ec-80ee00a8a359"></script>
 </body>
+
 </html>
