@@ -70,6 +70,20 @@
         });
     }
 
+    /* ---------- Shared metrics ---------- */
+    // Source Code Pro's 0.6em advance quantizes to whole pixels (8px at 13px);
+    // measure it live so charts and bars tile and fit exactly.
+    function charW() {
+        var s = document.createElement('span');
+        s.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;' +
+            'font:400 13px "Source Code Pro", monospace';
+        s.textContent = '██████████░░░░░░0123456789:/ ';
+        document.body.appendChild(s);
+        var w = s.getBoundingClientRect().width / s.textContent.length;
+        s.remove();
+        return w || 7.8;
+    }
+
     /* ---------- ASCII bar chart ---------- */
     function renderChart(el) {
         var data;
@@ -78,13 +92,26 @@
         } catch (e) {
             return;
         }
-        var width = Math.max(4, parseInt(el.dataset.width || '20', 10));
-        var max = 0;
-        var labelLen = 0;
+        var labelLen = 0, valLen = 0, max = 0;
         data.forEach(function (d) {
             if (d.value > max) max = d.value;
-            if (d.label.length > labelLen) labelLen = d.label.length;
+            var l = d.label.length;
+            if (l > labelLen) labelLen = l;
+            var v = String(d.display != null ? d.display : d.value).length;
+            if (v > valLen) valLen = v;
         });
+
+        var width = el.dataset.width;
+        if (width === 'auto' || el.dataset.autoWidth === '1') {
+            el.dataset.autoWidth = '1';
+            var cs = getComputedStyle(el);
+            var avail = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+            width = Math.max(6, Math.floor(avail / charW()) - labelLen - valLen - 3);
+            el.dataset.width = width;
+        } else {
+            width = Math.max(4, parseInt(width || '20', 10));
+        }
+
         var html = data.map(function (d) {
             var n = max > 0 ? (d.value / max) * width : 0;
             var full = Math.round(n);
@@ -98,7 +125,8 @@
                 '<span class="ax-value">' + (d.display != null ? d.display : d.value) + '</span>'
             );
         }).join('\n');
-        el.innerHTML = html + '\n<span class="ax-axis">' + '└' + '─'.repeat(labelLen + width + 2, '─') + '┘</span>';
+        var axisLen = labelLen + 1 + width + 1 + valLen;
+        el.innerHTML = html + '\n<span class="ax-axis">' + '└' + '─'.repeat(axisLen) + '┘</span>';
     }
 
     function renderAllCharts(scope) {
@@ -277,7 +305,8 @@
         chart: renderAllCharts,
         dots: fillDots,
         boot: boot,
-        cli: cli
+        cli: cli,
+        charW: charW
     };
 
     if (document.readyState === 'loading') {
@@ -291,5 +320,19 @@
         renderAllRetro();
         renderAllCharts();
         fillDots();
+
+        // auto-width charts re-flow on resize and after the webfont swaps in
+        var t;
+        window.addEventListener('resize', function () {
+            clearTimeout(t);
+            t = setTimeout(function () {
+                document.querySelectorAll('.ascii[data-chart]').forEach(renderChart);
+            }, 150);
+        });
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () {
+                document.querySelectorAll('.ascii[data-chart]').forEach(renderChart);
+            });
+        }
     }
 })();

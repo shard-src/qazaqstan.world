@@ -640,6 +640,35 @@ html:not(.dark) .leader-dots {
     .cli-cursor, .retro .rp-cursor { animation: none; }
 }
 
+/* ---------- Audio player ---------- */
+.player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player .retro {
+    flex: 1 1 0;
+    min-width: 0;
+    cursor: pointer;
+    margin: 0;
+}
+
+.player-audio {
+    display: none;
+}
+
+/* narrow screens: the seek bar takes the full row below the button */
+@media (max-width: 480px) {
+    .player {
+        flex-wrap: wrap;
+    }
+
+    .player .retro {
+        flex: 1 1 100%;
+    }
+}
+
 /* ---------- Figures / media ---------- */
 figure {
     margin: 0;

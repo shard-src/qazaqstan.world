@@ -169,17 +169,19 @@
                 <div class="card card-glow">
                     <div class="card-header">
                         <span class="card-title">Largest cities</span>
-                        <span class="badge" data-tone="muted">2021</span>
+                        <span class="badge" data-tone="muted">2021 census</span>
                     </div>
                     <div class="card-body ascii"
-                        data-width='16'
+                        data-width='auto'
                         data-chart='[
                             {"label":"ALMATY","value":2030454,"display":"2.03M"},
                             {"label":"ASTANA","value":1350228,"display":"1.35M"},
                             {"label":"SHYMKENT","value":1055828,"display":"1.06M"},
                             {"label":"KARAGANDA","value":538861,"display":"539K"},
                             {"label":"AKTOBE","value":511979,"display":"512K"},
-                            {"label":"TARAZ","value":360933,"display":"361K"}
+                            {"label":"TARAZ","value":360933,"display":"361K"},
+                            {"label":"PAVLODAR","value":359169,"display":"359K"},
+                            {"label":"OSKEMEN","value":333056,"display":"333K"}
                         ]'>
                     </div>
                 </div>
@@ -227,17 +229,23 @@
             <div class="card card-glow">
                 <div class="card-header">
                     <span class="card-title">Meniñ elim — since 2006</span>
-                    <span class="status"><span class="status-dot" data-tone="primary"></span>standby</span>
+                    <span class="status" id="anthem-status">
+                        <span class="status-dot" data-tone="primary" id="anthem-status-dot"></span>
+                        <span id="anthem-status-text">standby</span>
+                    </span>
                 </div>
                 <div class="card-body">
+                    <div class="player">
+                        <button class="btn btn-sm" id="anthem-toggle" type="button" aria-label="play anthem">play</button>
+                        <p class="retro" id="anthem-progress" data-value="0" data-width="34" data-tone="green"
+                            data-pct="--:-- / --:--" title="click to seek"></p>
+                    </div>
                     <figure>
-                        <audio controls id="anthem-audio">
+                        <audio class="player-audio" id="anthem-audio">
                             <source src="./assets/anthem.ogg" type="audio/ogg; codecs=vorbis">
                             Audio tag is not supported by your browser.
                         </audio>
                     </figure>
-                    <p class="retro" id="anthem-progress" data-value="0" data-width="34" data-tone="green"
-                        data-pct="--:-- / --:--" style="margin-top:10px"></p>
                 </div>
             </div>
         </section>
@@ -431,29 +439,21 @@ Bızdıñ el osyndai!
             }
         });
 
-        // Anthem playback drives the retro progress bar (width adapts to card)
+        // Custom terminal player for the anthem (button + seekable retro bar)
         (function () {
             var audio = document.getElementById('anthem-audio');
             var bar = document.getElementById('anthem-progress');
-            if (!audio || !bar) return;
+            var btn = document.getElementById('anthem-toggle');
+            var dot = document.getElementById('anthem-status-dot');
+            var statusText = document.getElementById('anthem-status-text');
+            if (!audio || !bar || !btn) return;
 
             var PCT_CHARS = 16; // brackets + space + "MM:SS / MM:SS"
 
-            // measure the real per-glyph advance (0.6em quantizes to whole px)
-            function charW() {
-                var s = document.createElement('span');
-                s.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;' +
-                    'font:400 13px "Source Code Pro", monospace';
-                s.textContent = '██████████░░░░░░0123456789:/ ';
-                document.body.appendChild(s);
-                var w = s.getBoundingClientRect().width / s.textContent.length;
-                s.remove();
-                return w || 7.8;
-            }
-
             function fitWidth() {
-                var avail = bar.closest('.card-body').clientWidth;
-                return Math.max(8, Math.min(34, Math.floor(avail / charW()) - PCT_CHARS));
+                // the <p> is a flex item with no padding, so clientWidth is the
+                // real available width regardless of font metrics
+                return Math.max(8, Math.min(34, Math.floor(bar.clientWidth / SMUI.charW()) - PCT_CHARS));
             }
 
             function fmt(t) {
@@ -470,6 +470,32 @@ Bızdıñ el osyndai!
                 SMUI.retro(bar);
             }
 
+            function setState(playing) {
+                btn.textContent = playing ? 'pause' : 'play';
+                btn.setAttribute('aria-label', playing ? 'pause anthem' : 'play anthem');
+                if (dot) dot.dataset.tone = playing ? '' : 'primary';
+                if (statusText) statusText.textContent = playing ? 'playing' : 'standby';
+            }
+
+            btn.addEventListener('click', function () {
+                if (audio.paused) { audio.play().catch(function () {}); } else { audio.pause(); }
+            });
+
+            audio.addEventListener('play', function () { setState(true); });
+            audio.addEventListener('pause', function () { setState(false); });
+            audio.addEventListener('ended', function () { setState(false); });
+
+            // click the bar to seek: [████░░░] — the block run starts after "["
+            bar.addEventListener('click', function (e) {
+                if (!isFinite(audio.duration) || !audio.duration) return;
+                var rect = bar.getBoundingClientRect();
+                var cw = SMUI.charW();
+                var frac = (e.clientX - rect.left - cw) / (parseInt(bar.dataset.width, 10) * cw);
+                frac = Math.min(1, Math.max(0, frac));
+                audio.currentTime = frac * audio.duration;
+                update();
+            });
+
             var resizeTimer;
             window.addEventListener('resize', function () {
                 clearTimeout(resizeTimer);
@@ -478,8 +504,8 @@ Bızdıñ el osyndai!
 
             audio.addEventListener('timeupdate', update);
             audio.addEventListener('loadedmetadata', update);
-            audio.addEventListener('ended', update);
             update();
+            setState(false);
             // metrics change when the webfont swaps in — re-fit after fonts load
             if (document.fonts && document.fonts.ready) {
                 document.fonts.ready.then(function () { update(); });
