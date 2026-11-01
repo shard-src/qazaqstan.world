@@ -321,6 +321,15 @@
         renderAllCharts();
         fillDots();
 
+        // "go to top" links: the nav is sticky and always visible, so the
+        // browser treats the #top anchor as already in view and never scrolls
+        document.querySelectorAll('a[href="#top"]').forEach(function (a) {
+            a.addEventListener('click', function (e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
         // auto-width charts re-flow on resize and after the webfont swaps in
         var t;
         window.addEventListener('resize', function () {

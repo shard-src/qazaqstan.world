@@ -197,6 +197,7 @@ kbd {
 
 .section {
     margin-top: 2.75rem;
+    scroll-margin-top: 4.5rem; /* keep anchors clear of the sticky nav */
 }
 
 .section > header {
