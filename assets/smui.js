@@ -106,7 +106,7 @@
             el.dataset.autoWidth = '1';
             var cs = getComputedStyle(el);
             var avail = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-            width = Math.max(6, Math.floor(avail / charW()) - labelLen - valLen - 3);
+            width = Math.max(6, Math.floor(avail / charW()) - labelLen - valLen - 4);
             el.dataset.width = width;
         } else {
             width = Math.max(4, parseInt(width || '20', 10));
@@ -125,7 +125,8 @@
                 '<span class="ax-value">' + (d.display != null ? d.display : d.value) + '</span>'
             );
         }).join('\n');
-        var axisLen = labelLen + 1 + width + 1 + valLen;
+        // axis spans exactly the data-line width: label + space + bar + space + value
+        var axisLen = labelLen + width + valLen;
         el.innerHTML = html + '\n<span class="ax-axis">' + '└' + '─'.repeat(axisLen) + '┘</span>';
     }
 
